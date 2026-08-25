@@ -13,26 +13,92 @@
 <!--  LOBBY — visible before a game starts                          -->
 <!-- ============================================================= -->
 <div id="lobbyView" class="lobby-screen">
+    <!-- terminal window chrome -->
+    <div class="term-bar" aria-hidden="true">
+        <span class="term-bar-dot term-bar-dot-a"></span>
+        <span class="term-bar-dot"></span>
+        <span class="term-bar-dot"></span>
+        <span class="term-bar-title">SOCOPS_BINGO_v1.0 — TERMINAL</span>
+        <span class="term-bar-status">&#9679; AO VIVO</span>
+    </div>
+
     <div class="lobby-layout">
-        <div class="brand-lockup reveal reveal-delay-1">
-            <span class="brand-kicker">ENCONTRO // MISSÃO SOCIAL</span>
+        <!-- left: brand + decorative board preview -->
+        <div class="brand-lockup">
+            <span class="brand-kicker">&gt; ENCONTRO // MISSÃO SOCIAL</span>
             <h1>Soc<span>Ops</span></h1>
-            <p>Bingo para quebrar o gelo.</p>
+            <p>Bingo para quebrar o gelo em eventos presenciais.</p>
+
+            <!-- decorative 5×5 preview — non-interactive, aria-hidden -->
+            <div class="deco-preview" aria-hidden="true">
+                <div class="deco-preview-label">
+                    <span class="status-dot"></span> PRÉVIA DO CARTÃO
+                </div>
+                <div class="deco-grid" role="presentation">
+                    <!-- row 1 -->
+                    <div class="deco-cell deco-cell-marked">&#10003;</div>
+                    <div class="deco-cell"></div>
+                    <div class="deco-cell deco-cell-marked">&#10003;</div>
+                    <div class="deco-cell"></div>
+                    <div class="deco-cell"></div>
+                    <!-- row 2 -->
+                    <div class="deco-cell"></div>
+                    <div class="deco-cell deco-cell-marked">&#10003;</div>
+                    <div class="deco-cell"></div>
+                    <div class="deco-cell deco-cell-marked">&#10003;</div>
+                    <div class="deco-cell"></div>
+                    <!-- row 3 -->
+                    <div class="deco-cell deco-cell-marked">&#10003;</div>
+                    <div class="deco-cell"></div>
+                    <div class="deco-cell deco-cell-free">LIVRE</div>
+                    <div class="deco-cell"></div>
+                    <div class="deco-cell deco-cell-marked">&#10003;</div>
+                    <!-- row 4 -->
+                    <div class="deco-cell deco-cell-win">&#10003;</div>
+                    <div class="deco-cell deco-cell-win">&#10003;</div>
+                    <div class="deco-cell deco-cell-win">&#10003;</div>
+                    <div class="deco-cell deco-cell-win">&#10003;</div>
+                    <div class="deco-cell deco-cell-win">&#10003;</div>
+                    <!-- row 5 -->
+                    <div class="deco-cell"></div>
+                    <div class="deco-cell deco-cell-marked">&#10003;</div>
+                    <div class="deco-cell"></div>
+                    <div class="deco-cell"></div>
+                    <div class="deco-cell deco-cell-marked">&#10003;</div>
+                </div>
+            </div>
         </div>
 
-        <div class="briefing-panel reveal reveal-delay-2">
+        <!-- right: instructions + launch -->
+        <div class="briefing-panel">
             <div class="panel-label"><span class="status-dot"></span> BRIEFING DA RODADA</div>
             <h2>Encontre sua<br><em>conexão.</em></h2>
             <p class="briefing-copy">Cada casa é uma pergunta esperando uma pessoa. Circule, converse e complete uma linha.</p>
             <div class="mission-list">
-                <div><span>01</span><p>Encontre alguém que combine com a casa.</p></div>
-                <div><span>02</span><p>Toque na casa para registrar a descoberta.</p></div>
-                <div><span>03</span><p>Complete cinco em linha e faça BINGO.</p></div>
+                <div><span>[01]</span><p>Encontre alguém que combine com a casa.</p></div>
+                <div><span>[02]</span><p>Toque na casa para registrar a descoberta.</p></div>
+                <div><span>[03]</span><p>Complete cinco em linha e faça BINGO.</p></div>
             </div>
-            <button onclick="launchGame()" class="launch-button">
-                <span>Iniciar missão</span><strong aria-hidden="true">&#8594;</strong>
+            <button onclick="launchGame()" class="launch-button" aria-label="Iniciar missão — abre o cartão de bingo">
+                <span>&gt; INICIAR MISSÃO</span><strong aria-hidden="true">&#8594;</strong>
             </button>
-            <p class="lobby-footnote">25 casas // 1 espaço livre // diversão garantida</p>
+
+            <!-- live metadata strip -->
+            <div class="lobby-meta" aria-label="Informações da rodada">
+                <div class="lobby-meta-item">
+                    <small>Casas</small>
+                    <strong>25</strong>
+                </div>
+                <div class="lobby-meta-item">
+                    <small>Espaço livre</small>
+                    <strong>01</strong>
+                </div>
+                <div class="lobby-meta-item">
+                    <small>Status</small>
+                    <strong><span class="status-dot" aria-hidden="true"></span> Pronto</strong>
+                </div>
+            </div>
+            <p class="lobby-footnote">_ pressione INICIAR para carregar seu cartão único</p>
         </div>
     </div>
 </div>
