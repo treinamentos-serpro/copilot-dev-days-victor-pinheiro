@@ -1,50 +1,237 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Share+Tech+Mono&display=swap');
 
 :root {
     --ink: #080b10;
-    --ink-soft: #0d1219;
-    --panel: #111820;
-    --panel-light: #17222b;
-    --line: #263640;
-    --muted: #82939d;
-    --paper: #e7f2ee;
-    --cyan: #36e1d1;
-    --lime: #c7f36b;
-    --amber: #ffbd59;
-    --mono: 'DM Mono', 'Courier New', monospace;
-    --display: 'Syne', 'Trebuchet MS', sans-serif;
+    --ink-soft: #0a0f0a;
+    --panel: #0d120d;
+    --panel-light: #121812;
+    --line: #1e2e1e;
+    --line-bright: #2a4a2a;
+    --muted: #5a7a5a;
+    --paper: #c8e6c8;
+    --phos: #39ff14;       /* phosphor green — primary accent */
+    --phos-dim: #20c010;   /* dimmer green for secondary text */
+    --phos-glow: rgba(57,255,20,.18);
+    --amber: #ffbd59;      /* amber — secondary signal */
+    --amber-glow: rgba(255,189,89,.18);
+    --cyan: #36e1d1;       /* kept for board/game compatibility */
+    --lime: #c7f36b;       /* kept for board tiles */
+    --mono: 'Share Tech Mono', 'DM Mono', 'Courier New', monospace;
+    --display: 'DM Mono', 'Courier New', monospace;
 }
 
 * { box-sizing: border-box; }
 html, body { min-height: 100%; margin: 0; }
 body { min-height: 100vh; color: var(--paper); background: var(--ink); font-family: var(--mono); -webkit-tap-highlight-color: transparent; }
 button { border: 0; font: inherit; cursor: pointer; }
-button:focus-visible { outline: 2px solid var(--cyan); outline-offset: 4px; }
-.status-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--lime); box-shadow: 0 0 10px var(--lime); }
+button:focus-visible { outline: 2px solid var(--phos); outline-offset: 4px; }
+.status-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--phos); box-shadow: 0 0 10px var(--phos); }
 .lobby-screen, .game-screen { min-height: 100vh; overflow: hidden; }
 
-.lobby-screen { display: grid; place-items: center; position: relative; padding: 3rem 1.5rem; background: linear-gradient(115deg, transparent 0 49.8%, rgba(54,225,209,.06) 50%, transparent 50.2%), radial-gradient(circle at 18% 22%, rgba(54,225,209,.12), transparent 24rem), var(--ink); }
-.lobby-screen::before, .game-screen::before { content: ''; position: absolute; inset: 0; pointer-events: none; opacity: .22; background-image: linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px); background-size: 32px 32px; mask-image: linear-gradient(to bottom, black, transparent 85%); }
-.lobby-layout { display: grid; grid-template-columns: minmax(16rem, 1fr) minmax(20rem, 29rem); gap: clamp(3rem, 9vw, 9rem); align-items: center; width: min(100%, 68rem); position: relative; }
-.brand-kicker, .panel-label, .game-intro div, .game-footer, .lobby-footnote { color: var(--cyan); font-size: .68rem; letter-spacing: .14em; text-transform: uppercase; }
-.brand-lockup h1 { margin: .9rem 0 .25rem; color: var(--paper); font-family: var(--display); font-size: clamp(4.4rem, 11vw, 8.5rem); font-weight: 800; letter-spacing: -.08em; line-height: .85; }
-.brand-lockup h1 span, .mini-brand span, .victory-card h2 span { color: var(--cyan); }
-.brand-lockup p { margin: 1rem 0 0; color: var(--muted); font-size: .9rem; }
-.briefing-panel { position: relative; padding: clamp(1.5rem, 4vw, 2.5rem); border: 1px solid var(--line); border-left: 3px solid var(--cyan); background: rgba(17,24,32,.88); box-shadow: 18px 18px 0 rgba(54,225,209,.06); }
-.panel-label { display: flex; align-items: center; gap: .6rem; }
-.briefing-panel h2 { margin: 1.4rem 0 1rem; font-family: var(--display); font-size: clamp(2rem, 5vw, 3.3rem); line-height: .98; }
-.briefing-panel h2 em { color: var(--cyan); font-style: normal; }
-.briefing-copy { max-width: 31rem; margin: 0; color: var(--muted); font-size: .78rem; line-height: 1.7; }
-.mission-list { margin: 1.7rem 0 2rem; border-top: 1px solid var(--line); }
-.mission-list div { display: flex; gap: 1rem; padding: .8rem 0; border-bottom: 1px solid var(--line); }
-.mission-list span { color: var(--lime); font-size: .68rem; }
-.mission-list p { margin: 0; color: var(--paper); font-size: .72rem; }
-.launch-button, .continue-button { display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 1rem 1.1rem; color: var(--ink); background: var(--cyan); font-family: var(--display); font-weight: 800; text-transform: uppercase; transition: background .2s, transform .2s, box-shadow .2s; }
-.launch-button strong { font-size: 1.4rem; }
-.launch-button:hover, .continue-button:hover { background: var(--lime); box-shadow: 5px 5px 0 rgba(199,243,107,.2); transform: translate(-2px, -2px); }
-.lobby-footnote { margin: 1.3rem 0 0; color: var(--muted); font-size: .58rem; text-align: center; }
+/* ═══════════════════════════════════════════════════════════════
+   LOBBY — retro terminal mission briefing
+   ═══════════════════════════════════════════════════════════════ */
+
+.lobby-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: 100vh;
+    padding: 2.5rem 1rem 3rem;
+    background:
+        repeating-linear-gradient(
+            0deg,
+            rgba(57,255,20,.025) 0px,
+            rgba(57,255,20,.025) 1px,
+            transparent 1px,
+            transparent 3px
+        ),
+        var(--ink-soft);
+    position: relative;
+}
+
+/* scanline vignette */
+.lobby-screen::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background: radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,.65) 100%);
+    z-index: 0;
+}
+
+/* ── fake terminal chrome ── */
+.terminal-chrome {
+    display: flex;
+    align-items: center;
+    gap: .55rem;
+    width: min(100%, 54rem);
+    padding: .55rem 1rem;
+    background: #151a15;
+    border: 1px solid var(--line-bright);
+    border-bottom: none;
+    border-radius: 5px 5px 0 0;
+    position: relative;
+    z-index: 1;
+}
+.tc-dot {
+    display: inline-block;
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+}
+.tc-dot-r { background: #ff5f57; }
+.tc-dot-a { background: #febc2e; }
+.tc-dot-g { background: #28c840; }
+.tc-title {
+    flex: 1;
+    text-align: center;
+    font-size: .65rem;
+    color: var(--muted);
+    letter-spacing: .06em;
+}
+
+/* ── terminal body ── */
+.terminal-body {
+    width: min(100%, 54rem);
+    padding: 1.8rem 2rem 2rem;
+    background: var(--panel);
+    border: 1px solid var(--line-bright);
+    border-radius: 0 0 5px 5px;
+    box-shadow: 0 0 40px rgba(57,255,20,.07), 0 0 80px rgba(0,0,0,.5);
+    position: relative;
+    z-index: 1;
+}
+
+/* ── ASCII art header ── */
+.term-art {
+    margin: 0 0 1.8rem;
+    color: var(--phos-dim);
+    font-size: clamp(.28rem, 1.1vw, .52rem);
+    line-height: 1.25;
+    overflow: hidden;
+    white-space: pre;
+    text-shadow: 0 0 8px var(--phos-dim);
+}
+
+/* ── prompt lines ── */
+.term-prompt {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0;
+    margin: 1.2rem 0 .6rem;
+    font-size: .82rem;
+}
+.prompt-user { color: var(--phos); font-weight: 500; }
+.prompt-sep  { color: var(--muted); }
+.prompt-path { color: var(--cyan); }
+.prompt-sym  { color: var(--paper); margin: 0 .35rem 0 0; }
+.prompt-cmd  { color: var(--paper); }
+
+/* ── briefing key-value block ── */
+.term-block {
+    margin: 0 0 .4rem;
+    padding: .9rem 1.1rem;
+    border-left: 3px solid var(--phos);
+    background: rgba(57,255,20,.04);
+}
+.term-key-val {
+    display: grid;
+    grid-template-columns: 9rem 1fr;
+    gap: .8rem;
+    padding: .28rem 0;
+    font-size: .74rem;
+    line-height: 1.5;
+}
+.tk {
+    color: var(--phos);
+    letter-spacing: .08em;
+    flex-shrink: 0;
+}
+.tv { color: var(--paper); }
+.tv-ok { color: var(--phos); display: flex; align-items: center; gap: .5rem; }
+
+/* ── step instructions ── */
+.term-steps {
+    margin: .4rem 0;
+    padding: .6rem 1.1rem;
+    border-left: 3px solid var(--amber);
+    background: rgba(255,189,89,.04);
+}
+.ts-row {
+    display: flex;
+    align-items: flex-start;
+    gap: .7rem;
+    padding: .3rem 0;
+    font-size: .74rem;
+    line-height: 1.5;
+}
+.ts-n   { color: var(--amber); flex-shrink: 0; min-width: 3rem; }
+.ts-sep { color: var(--line-bright); flex-shrink: 0; }
+.ts-t   { color: var(--paper); }
+
+/* ── launch area ── */
+.term-launch {
+    margin-top: 1.6rem;
+}
+.launch-button {
+    display: flex;
+    align-items: center;
+    gap: .9rem;
+    width: 100%;
+    padding: .9rem 1.2rem;
+    background: transparent;
+    border: 2px solid var(--phos);
+    color: var(--phos);
+    font-family: var(--mono);
+    font-size: .95rem;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+    transition: background .2s, color .2s, box-shadow .2s, transform .15s;
+    box-shadow: 0 0 12px var(--phos-glow), inset 0 0 0 rgba(57,255,20,0);
+}
+.lb-prompt { color: var(--phos); font-size: 1rem; }
+.lb-text   { flex: 1; text-align: left; }
+.lb-cursor {
+    display: inline-block;
+    animation: blink .85s step-start infinite;
+    color: var(--phos);
+    font-size: 1.1rem;
+    line-height: 1;
+}
+.launch-button:hover {
+    background: var(--phos);
+    color: var(--ink);
+    box-shadow: 0 0 28px var(--phos-glow), 0 0 60px rgba(57,255,20,.12);
+    transform: translateY(-1px);
+}
+.launch-button:hover .lb-cursor { color: var(--ink); }
+
+/* ── terminal footer ── */
+.term-footer {
+    display: flex;
+    align-items: center;
+    gap: .8rem;
+    margin-top: 1.4rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--line);
+    font-size: .62rem;
+    color: var(--muted);
+    letter-spacing: .09em;
+}
+.tf-sep  { color: var(--line-bright); }
+.tf-blink { color: var(--phos); animation: blink 1.2s step-start infinite; }
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
 
 .game-screen { position: relative; display: flex; flex-direction: column; background: var(--ink); }
+.mini-brand span { color: var(--cyan); }
+.victory-card h2 span { color: var(--amber); }
 .game-header { z-index: 1; display: flex; align-items: center; justify-content: space-between; padding: 1.2rem clamp(1rem, 4vw, 3rem); border-bottom: 1px solid var(--line); background: rgba(8,11,16,.9); }
 .back-button { padding: .45rem 0; color: var(--muted); background: none; font-size: .72rem; text-transform: uppercase; transition: color .2s; }
 .back-button span { margin-right: .45rem; color: var(--cyan); font-size: 1.1rem; }
@@ -87,14 +274,14 @@ button:focus-visible { outline: 2px solid var(--cyan); outline-offset: 4px; }
 .reveal { animation: reveal .7s both; }
 .reveal-delay-1 { animation-delay: .08s; }
 .reveal-delay-2 { animation-delay: .2s; }
+.reveal-delay-3 { animation-delay: .38s; }
 @keyframes reveal { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes rise { from { opacity: 0; transform: translateY(20px) scale(.97); } to { opacity: 1; transform: translateY(0) scale(1); } }
 
 @media (max-width: 650px) {
-    .lobby-layout { display: block; width: min(100%, 30rem); }
-    .brand-lockup { margin-bottom: 2.5rem; text-align: center; }
-    .brand-lockup h1 { font-size: clamp(4.5rem, 23vw, 7rem); }
-    .briefing-panel { box-shadow: 10px 10px 0 rgba(54,225,209,.06); }
+    .terminal-body { padding: 1.2rem 1rem 1.5rem; }
+    .term-art { font-size: .22rem; }
+    .term-key-val { grid-template-columns: 7rem 1fr; font-size: .68rem; }
     .mini-brand small { display: none; }
     .game-intro { display: block; margin-top: 1rem; }
     .game-intro p { margin-top: .5rem; }

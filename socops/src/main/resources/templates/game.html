@@ -13,26 +13,67 @@
 <!--  LOBBY — visible before a game starts                          -->
 <!-- ============================================================= -->
 <div id="lobbyView" class="lobby-screen">
-    <div class="lobby-layout">
-        <div class="brand-lockup reveal reveal-delay-1">
-            <span class="brand-kicker">ENCONTRO // MISSÃO SOCIAL</span>
-            <h1>Soc<span>Ops</span></h1>
-            <p>Bingo para quebrar o gelo.</p>
+    <div class="terminal-chrome" aria-hidden="true">
+        <span class="tc-dot tc-dot-r"></span><span class="tc-dot tc-dot-a"></span><span class="tc-dot tc-dot-g"></span>
+        <span class="tc-title">socops-terminal — bash</span>
+    </div>
+
+    <div class="terminal-body reveal reveal-delay-1">
+        <pre class="term-art" aria-hidden="true">
+ ___  ___  ___      ___  ___  ________  ________     
+|\  \|\  \|\  \    /  /||\  \|\  \|\   __  \|\   ____\    
+\ \  \\\  \ \  \  /  / /\ \  \ \  \ \  \|\  \ \  \___|    
+ \ \   __  \ \  \/  / /  \ \  \ \  \ \   __  \ \  \____   
+  \ \  \ \  \ \    / /    \ \  \ \  \ \  \ \  \ \  \___\  
+   \ \__\ \__\ \__/ /      \ \__\ \__\ \__\ \__\ \_______\
+    \|__|\|__|\|__|/        \|__|\|__|\|__|\|__|\|_______|
+        </pre>
+
+        <div class="term-line term-prompt reveal reveal-delay-1">
+            <span class="prompt-user">ops@socops</span><span class="prompt-sep">:</span><span class="prompt-path">~/missao</span><span class="prompt-sym">$</span>
+            <span class="prompt-cmd"> cat briefing.txt</span>
         </div>
 
-        <div class="briefing-panel reveal reveal-delay-2">
-            <div class="panel-label"><span class="status-dot"></span> BRIEFING DA RODADA</div>
-            <h2>Encontre sua<br><em>conexão.</em></h2>
-            <p class="briefing-copy">Cada casa é uma pergunta esperando uma pessoa. Circule, converse e complete uma linha.</p>
-            <div class="mission-list">
-                <div><span>01</span><p>Encontre alguém que combine com a casa.</p></div>
-                <div><span>02</span><p>Toque na casa para registrar a descoberta.</p></div>
-                <div><span>03</span><p>Complete cinco em linha e faça BINGO.</p></div>
-            </div>
-            <button onclick="launchGame()" class="launch-button">
-                <span>Iniciar missão</span><strong aria-hidden="true">&#8594;</strong>
+        <div class="term-block reveal reveal-delay-2">
+            <div class="term-key-val"><span class="tk">OPERAÇÃO</span><span class="tv">SOC-OPS // BINGO SOCIAL</span></div>
+            <div class="term-key-val"><span class="tk">OBJETIVO</span><span class="tv">Encontrar conexões humanas em evento presencial</span></div>
+            <div class="term-key-val"><span class="tk">TABULEIRO</span><span class="tv">Grade 5×5 — 25 casas — 1 espaço livre central</span></div>
+            <div class="term-key-val"><span class="tk">VITÓRIA</span><span class="tv">Complete 5 casas em linha, coluna ou diagonal</span></div>
+            <div class="term-key-val tk-status"><span class="tk">STATUS</span><span class="tv tv-ok"><span class="status-dot"></span> PRONTO PARA INICIAR</span></div>
+        </div>
+
+        <div class="term-line term-prompt reveal reveal-delay-2">
+            <span class="prompt-user">ops@socops</span><span class="prompt-sep">:</span><span class="prompt-path">~/missao</span><span class="prompt-sym">$</span>
+            <span class="prompt-cmd"> cat instrucoes.txt</span>
+        </div>
+
+        <div class="term-steps reveal reveal-delay-2">
+            <div class="ts-row"><span class="ts-n">[01]</span><span class="ts-sep">──</span><span class="ts-t">Localize alguém que corresponda à descrição da casa</span></div>
+            <div class="ts-row"><span class="ts-n">[02]</span><span class="ts-sep">──</span><span class="ts-t">Toque na casa para registrar a descoberta</span></div>
+            <div class="ts-row"><span class="ts-n">[03]</span><span class="ts-sep">──</span><span class="ts-t">Complete 5 em linha e declare BINGO</span></div>
+        </div>
+
+        <div class="term-line term-prompt reveal reveal-delay-3">
+            <span class="prompt-user">ops@socops</span><span class="prompt-sep">:</span><span class="prompt-path">~/missao</span><span class="prompt-sym">$</span>
+            <span class="prompt-cmd"> ./iniciar-missao.sh</span>
+        </div>
+
+        <div class="term-launch reveal reveal-delay-3">
+            <button onclick="launchGame()" class="launch-button" aria-label="Iniciar missão de bingo">
+                <span class="lb-prompt">&gt;&gt;</span>
+                <span class="lb-text">INICIAR MISSÃO</span>
+                <span class="lb-cursor" aria-hidden="true">█</span>
             </button>
-            <p class="lobby-footnote">25 casas // 1 espaço livre // diversão garantida</p>
+        </div>
+
+        <div class="term-footer reveal reveal-delay-3">
+            <span class="tf-item">SO-25</span>
+            <span class="tf-sep">|</span>
+            <span class="tf-item">25 CASAS</span>
+            <span class="tf-sep">|</span>
+            <span class="tf-item">1 ESPAÇO LIVRE</span>
+            <span class="tf-sep">|</span>
+            <span class="tf-item tf-blink">█ AO VIVO</span>
         </div>
     </div>
 </div>
