@@ -23,4 +23,10 @@ public class BingoRestController {
     public List<BingoCell> dispenseFreshBoard() {
         return BoardAssembler.assembleNewBoard();
     }
+
+    @GetMapping("/api/scavenger-hunt/fresh-list")
+    @ResponseBody
+    public List<BingoCell> dispenseFreshScavengerHuntList() {
+        return BoardAssembler.assembleScavengerHuntList();
+    }
 }

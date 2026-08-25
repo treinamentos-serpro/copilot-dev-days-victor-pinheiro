@@ -50,6 +50,15 @@ public final class BoardAssembler {
         return freshBoard;
     }
 
+    /** Produce every bingo prompt as an unchecked Scavenger Hunt item. */
+    public static List<BingoCell> assembleScavengerHuntList() {
+        List<BingoCell> huntItems = new ArrayList<>(IcebreakerPrompts.ALL_PROMPTS.size());
+        for (int index = 0; index < IcebreakerPrompts.ALL_PROMPTS.size(); index++) {
+            huntItems.add(BingoCell.ofPrompt(index, IcebreakerPrompts.ALL_PROMPTS.get(index)));
+        }
+        return huntItems;
+    }
+
     /* ------------------------------------------------------------------ */
     /*  Cell toggling                                                      */
     /* ------------------------------------------------------------------ */

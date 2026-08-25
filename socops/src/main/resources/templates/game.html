@@ -68,6 +68,11 @@
             <span class="term-start-arrow" aria-hidden="true">&#8594;</span>
         </button>
 
+        <button id="scavengerModeButton" onclick="launchScavengerHunt()" class="term-mode-btn">
+            <span>LISTA SCAVENGER HUNT</span>
+            <span aria-hidden="true">&#8594;</span>
+        </button>
+
         <p class="term-footnote"><span class="term-cursor-inline" aria-hidden="true">&#9646;</span> Pronto para conexão</p>
     </section>
 </div>
@@ -106,6 +111,15 @@
             <div class="board-corner board-corner-bl"></div><div class="board-corner board-corner-br"></div>
         </div>
     </main>
+    <section id="scavengerStage" class="scavenger-stage" style="display:none" aria-label="Lista Scavenger Hunt">
+        <div class="scavenger-summary">
+            <span>PROGRESSO</span>
+            <progress id="scavengerProgress" value="0" max="24">0 de 24</progress>
+            <span id="scavengerProgressLabel">0/24</span>
+        </div>
+        <ul id="scavengerList" class="scavenger-list"></ul>
+        <template id="scavengerItemTemplate"><li><label><input type="checkbox"/> <span></span></label></li></template>
+    </section>
     <footer class="game-footer"><span>SO-25</span><span>ENCONTRE UMA CONEXÃO</span><span>AO VIVO <i class="status-dot"></i></span></footer>
 </div>
 
@@ -142,6 +156,7 @@
     var streakFound = null;        /* WinningStreak or null       */
     var modalShown  = false;
     var currentPhase = "LOBBY";    /* LOBBY | ACTIVE | VICTORY    */
+    var gameMode = "BINGO";        /* BINGO | SCAVENGER           */
 
     /* ── DOM refs ─────────────────────────────────────────────── */
     var lobbyDiv   = document.getElementById("lobbyView");
@@ -149,6 +164,10 @@
     var gridDiv    = document.getElementById("gridContainer");
     var bannerDiv  = document.getElementById("bingoBanner");
     var overlayDiv = document.getElementById("victoryOverlay");
+    var scavengerStage = document.getElementById("scavengerStage");
+    var scavengerList = document.getElementById("scavengerList");
+    var scavengerProgress = document.getElementById("scavengerProgress");
+    var scavengerProgressLabel = document.getElementById("scavengerProgressLabel");
 
     /* ── phase switching ──────────────────────────────────────── */
     function showPhase(phase) {
@@ -157,6 +176,8 @@
         activeDiv.style.display  = (phase !== "LOBBY") ? "" : "none";
         bannerDiv.style.display  = (streakFound)       ? "" : "none";
         overlayDiv.style.display = (modalShown)        ? "" : "none";
+        gridDiv.parentElement.parentElement.style.display = (gameMode === "BINGO") ? "" : "none";
+        scavengerStage.style.display = (gameMode === "SCAVENGER") ? "" : "none";
     }
 
     /* ── board rendering ──────────────────────────────────────── */
@@ -237,6 +258,45 @@
         document.getElementById("markedCount").textContent = String(marked).padStart(2, "0");
     }
 
+    function paintScavengerList() {
+        scavengerList.innerHTML = "";
+        for (var i = 0; i < liveTiles.length; i++) {
+            var item = liveTiles[i];
+            var listItem = document.createElement("li");
+            var label = document.createElement("label");
+            var checkbox = document.createElement("input");
+            var prompt = document.createElement("span");
+            checkbox.type = "checkbox";
+            checkbox.checked = item.selected;
+            checkbox.setAttribute("aria-label", item.prompt);
+            checkbox.addEventListener("change", (function (cellId) {
+                return function () {
+                    liveTiles = flipTile(liveTiles, cellId);
+                    persistSnapshot();
+                    updateScavengerProgress();
+                    updateStatus();
+                };
+            })(item.id));
+            prompt.textContent = item.prompt;
+            label.appendChild(checkbox);
+            label.appendChild(prompt);
+            listItem.appendChild(label);
+            scavengerList.appendChild(listItem);
+        }
+        updateScavengerProgress();
+    }
+
+    function updateScavengerProgress() {
+        var marked = 0;
+        for (var i = 0; i < liveTiles.length; i++) {
+            if (liveTiles[i].selected) { marked++; }
+        }
+        scavengerProgress.value = marked;
+        scavengerProgress.max = liveTiles.length;
+        scavengerProgress.textContent = marked + " de " + liveTiles.length;
+        scavengerProgressLabel.textContent = marked + "/" + liveTiles.length;
+    }
+
     /* ── board manipulation (mirrors BoardAssembler.java) ─────── */
     function flipTile(board, cellId) {
         return board.map(function (c) {
@@ -308,7 +368,8 @@
                 phase: currentPhase,
                 tiles: liveTiles,
                 streak: streakFound,
-                modal: modalShown
+                modal: modalShown,
+                mode: gameMode
             });
             localStorage.setItem(PERSIST_KEY, blob);
         } catch (_) { /* storage full or unavailable */ }
@@ -324,6 +385,7 @@
             streakFound = snap.streak || null;
             modalShown  = !!snap.modal;
             currentPhase = snap.phase || "ACTIVE";
+            gameMode = snap.mode || "BINGO";
             return currentPhase !== "LOBBY";
         } catch (_) { return false; }
     }
@@ -337,8 +399,25 @@
                 streakFound = null;
                 modalShown  = false;
                 currentPhase = "ACTIVE";
+                gameMode = "BINGO";
                 persistSnapshot();
                 paintGrid();
+                updateStatus();
+                showPhase("ACTIVE");
+            });
+    };
+
+    window.launchScavengerHunt = function () {
+        fetch("/api/scavenger-hunt/fresh-list")
+            .then(function (resp) { return resp.json(); })
+            .then(function (items) {
+                liveTiles = items;
+                streakFound = null;
+                modalShown = false;
+                currentPhase = "ACTIVE";
+                gameMode = "SCAVENGER";
+                persistSnapshot();
+                paintScavengerList();
                 updateStatus();
                 showPhase("ACTIVE");
             });
@@ -349,6 +428,7 @@
         streakFound = null;
         modalShown  = false;
         currentPhase = "LOBBY";
+        gameMode = "BINGO";
         persistSnapshot();
         showPhase("LOBBY");
     };
@@ -361,7 +441,11 @@
 
     /* ── boot ─────────────────────────────────────────────────── */
     if (restoreSnapshot()) {
-        paintGrid();
+        if (gameMode === "SCAVENGER") {
+            paintScavengerList();
+        } else {
+            paintGrid();
+        }
         updateStatus();
         showPhase(currentPhase);
     } else {
