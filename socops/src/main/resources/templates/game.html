@@ -1,92 +1,92 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Soc Ops — Social Bingo</title>
+    <title>Soc Ops | Bingo social</title>
     <link rel="stylesheet" th:href="@{/css/app.css}"/>
     <link rel="icon" type="image/png" th:href="@{/favicon.png}"/>
-    <style>
-        /* active-state tweaks that need pseudo-class selectors */
-        .tile-active:active { background-color: #f3f4f6 !important; }
-        .accent-active:active { background-color: #3b82f6 !important; }
-    </style>
 </head>
-<body class="h-full">
+<body>
 
 <!-- ============================================================= -->
 <!--  LOBBY — visible before a game starts                          -->
 <!-- ============================================================= -->
-<div id="lobbyView" class="flex flex-col items-center justify-center min-h-full p-6 bg-gray-50">
-    <div class="text-center max-w-sm">
-        <h1 class="text-4xl font-bold text-gray-900 mb-2">Soc Ops</h1>
-        <p class="text-lg text-gray-600 mb-8">Social Bingo</p>
-
-        <div class="bg-white rounded-lg p-6 shadow-sm border border-gray-200 mb-8">
-            <h2 class="font-semibold text-gray-800 mb-3">How to play</h2>
-            <ul class="text-left text-gray-600 text-sm space-y-2">
-                <li>• Find people who match the questions</li>
-                <li>• Tap a square when you find a match</li>
-                <li>• Get 5 in a row to win!</li>
-            </ul>
+<div id="lobbyView" class="lobby-screen">
+    <div class="lobby-layout">
+        <div class="brand-lockup reveal reveal-delay-1">
+            <span class="brand-kicker">ENCONTRO // MISSÃO SOCIAL</span>
+            <h1>Soc<span>Ops</span></h1>
+            <p>Bingo para quebrar o gelo.</p>
         </div>
 
-        <button onclick="launchGame()"
-                class="w-full bg-accent text-white font-semibold py-4 px-8 rounded-lg text-lg accent-active transition-colors">
-            Start Game
-        </button>
+        <div class="briefing-panel reveal reveal-delay-2">
+            <div class="panel-label"><span class="status-dot"></span> BRIEFING DA RODADA</div>
+            <h2>Encontre sua<br><em>conexão.</em></h2>
+            <p class="briefing-copy">Cada casa é uma pergunta esperando uma pessoa. Circule, converse e complete uma linha.</p>
+            <div class="mission-list">
+                <div><span>01</span><p>Encontre alguém que combine com a casa.</p></div>
+                <div><span>02</span><p>Toque na casa para registrar a descoberta.</p></div>
+                <div><span>03</span><p>Complete cinco em linha e faça BINGO.</p></div>
+            </div>
+            <button onclick="launchGame()" class="launch-button">
+                <span>Iniciar missão</span><strong aria-hidden="true">&#8594;</strong>
+            </button>
+            <p class="lobby-footnote">25 casas // 1 espaço livre // diversão garantida</p>
+        </div>
     </div>
 </div>
 
 <!-- ============================================================= -->
 <!--  ACTIVE GAME — board, header, optional bingo banner            -->
 <!-- ============================================================= -->
-<div id="activeView" class="flex flex-col min-h-full bg-gray-50" style="display:none">
+<div id="activeView" class="game-screen" style="display:none">
 
     <!-- top bar -->
-    <header class="flex items-center justify-between p-3 bg-white border-b border-gray-200">
-        <button onclick="retreatToLobby()"
-                class="text-gray-500 text-sm px-3 py-1\.5 rounded tile-active">
-            &#8592; Back
+    <header class="game-header">
+        <button onclick="retreatToLobby()" class="back-button" aria-label="Voltar ao briefing">
+            <span aria-hidden="true">&#8592;</span> Voltar
         </button>
-        <h1 class="font-bold text-gray-900">Soc Ops</h1>
-        <div class="w-16"></div>
+        <div class="mini-brand">SOC<span>OPS</span><small>// SOCIAL BINGO</small></div>
+        <div class="score-readout"><span id="markedCount">01</span><small>MARCADAS</small></div>
     </header>
 
-    <!-- hint -->
-    <p class="text-center text-gray-500 text-sm py-2 px-4">
-        Tap a square when you find someone who matches it.
-    </p>
+    <div class="game-intro">
+        <div><span class="status-dot"></span> RODADA ATIVA</div>
+        <p>Converse. Encontre. Marque.</p>
+    </div>
 
     <!-- bingo banner (hidden until victory) -->
-    <div id="bingoBanner"
-         class="bg-amber-100 text-amber-800 text-center py-2 font-semibold text-sm"
-         style="display:none">
-        &#127881; BINGO! You got a line!
+    <div id="bingoBanner" class="bingo-banner" style="display:none">
+        <span aria-hidden="true">✦</span> BINGO! Linha completa <span aria-hidden="true">✦</span>
     </div>
 
     <!-- the 5×5 grid -->
-    <div class="flex-1 flex items-center justify-center p-3">
-        <div id="gridContainer"
-             class="grid grid-cols-5 gap-1 w-full max-w-md mx-auto aspect-square">
+    <main class="board-stage">
+        <div class="board-frame">
+            <div class="board-corner board-corner-tl"></div><div class="board-corner board-corner-tr"></div>
+            <div id="gridContainer" class="bingo-grid">
             <!-- tiles injected by JS -->
+            </div>
+            <div class="board-corner board-corner-bl"></div><div class="board-corner board-corner-br"></div>
         </div>
-    </div>
+    </main>
+    <footer class="game-footer"><span>SO-25</span><span>ENCONTRE UMA CONEXÃO</span><span>AO VIVO <i class="status-dot"></i></span></footer>
 </div>
 
 <!-- ============================================================= -->
 <!--  VICTORY MODAL — overlays the board                            -->
 <!-- ============================================================= -->
 <div id="victoryOverlay"
-     class="fixed inset-0 bg-black\/50 flex items-center justify-center p-4 z-50"
+     class="victory-overlay"
      style="display:none">
-    <div class="bg-white rounded-xl p-6 max-w-xs w-full text-center shadow-xl animate-[bounce_0.5s_ease-out]">
-        <div class="text-5xl mb-4">&#127881;</div>
-        <h2 class="text-3xl font-bold text-amber-500 mb-2">BINGO!</h2>
-        <p class="text-gray-600 mb-6">You completed a line!</p>
-        <button onclick="dismissVictoryModal()"
-                class="w-full bg-accent text-white font-semibold py-3 px-6 rounded-lg accent-active transition-colors">
-            Keep Playing
+    <div class="victory-card">
+        <div class="victory-spark" aria-hidden="true">✦</div>
+        <span class="panel-label">MISSÃO CUMPRIDA</span>
+        <h2>BINGO<span>!</span></h2>
+        <p>Você completou uma linha.<br>A conversa está só começando.</p>
+        <button onclick="dismissVictoryModal()" class="continue-button">
+            Continuar jogando <span aria-hidden="true">&#8594;</span>
         </button>
     </div>
 </div>
@@ -134,36 +134,34 @@
             var btn = document.createElement("button");
 
             /* base styling identical to the original Blazor BingoSquare */
-            var base = "relative flex items-center justify-center p-1 text-center " +
-                       "border border-gray-300 rounded transition-all duration-150 " +
-                       "select-none min-h-[60px] text-xs leading-tight";
+            var base = "bingo-tile";
 
             var state;
             if (tile.selected) {
                 state = winIds[tile.id]
-                    ? "bg-amber-200 border-amber-400 text-amber-900"
-                    : "bg-marked border-marked-border text-green-800";
+                    ? "tile-winning"
+                    : "tile-marked";
             } else {
-                state = "bg-white text-gray-700 tile-active";
+                state = "tile-open";
             }
 
-            var extra = tile.freeCell ? " font-bold text-sm" : "";
+            var extra = tile.freeCell ? " tile-free" : "";
             btn.className = base + " " + state + extra;
 
             if (tile.freeCell) { btn.disabled = true; }
             btn.setAttribute("aria-pressed", String(tile.selected));
-            btn.setAttribute("aria-label", tile.freeCell ? "Free space" : tile.prompt);
+            btn.setAttribute("aria-label", tile.freeCell ? "Espaço livre" : tile.prompt);
 
             /* inner label */
             var labelSpan = document.createElement("span");
-            labelSpan.className = "wrap-break-word hyphens-auto";
+            labelSpan.className = "tile-label";
             labelSpan.textContent = tile.prompt;
             btn.appendChild(labelSpan);
 
             /* check-mark for marked non-free tiles */
             if (tile.selected && !tile.freeCell) {
                 var tick = document.createElement("span");
-                tick.className = "absolute top-0.5 right-0.5 text-green-600 text-xs";
+                tick.className = "tile-check";
                 tick.textContent = "\u2713";
                 btn.appendChild(tick);
             }
@@ -191,8 +189,17 @@
         }
         persistSnapshot();
         paintGrid();
+        updateStatus();
         bannerDiv.style.display  = streakFound ? "" : "none";
         overlayDiv.style.display = modalShown  ? "" : "none";
+    }
+
+    function updateStatus() {
+        var marked = 0;
+        for (var i = 0; i < liveTiles.length; i++) {
+            if (liveTiles[i].selected) { marked++; }
+        }
+        document.getElementById("markedCount").textContent = String(marked).padStart(2, "0");
     }
 
     /* ── board manipulation (mirrors BoardAssembler.java) ─────── */
@@ -297,6 +304,7 @@
                 currentPhase = "ACTIVE";
                 persistSnapshot();
                 paintGrid();
+                updateStatus();
                 showPhase("ACTIVE");
             });
     };
@@ -319,6 +327,7 @@
     /* ── boot ─────────────────────────────────────────────────── */
     if (restoreSnapshot()) {
         paintGrid();
+        updateStatus();
         showPhase(currentPhase);
     } else {
         showPhase("LOBBY");
