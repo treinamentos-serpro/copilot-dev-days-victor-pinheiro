@@ -13,28 +13,63 @@
 <!--  LOBBY — visible before a game starts                          -->
 <!-- ============================================================= -->
 <div id="lobbyView" class="lobby-screen">
-    <div class="lobby-layout">
-        <div class="brand-lockup reveal reveal-delay-1">
-            <span class="brand-kicker">ENCONTRO // MISSÃO SOCIAL</span>
-            <h1>Soc<span>Ops</span></h1>
-            <p>Bingo para quebrar o gelo.</p>
+    <div class="term-scanlines" aria-hidden="true"></div>
+
+    <!-- left column: identity -->
+    <aside class="term-identity reveal reveal-delay-1">
+        <div class="term-sys-line">
+            <span class="term-cursor" aria-hidden="true"></span>
+            <span class="term-prompt-text">SISTEMA // SOC-OPS-v1</span>
+        </div>
+        <h1 class="term-logo">SOC<em>OPS</em></h1>
+        <p class="term-tagline">Console de<br>missão social.</p>
+        <p class="term-invite">Encontre sua conexão.<br>Quebre o gelo. Faça BINGO.</p>
+        <div class="term-signal-bar" aria-hidden="true">
+            <span></span><span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span><span></span>
+        </div>
+    </aside>
+
+    <!-- right column: mission readout + start -->
+    <section class="term-panel reveal reveal-delay-2" aria-label="Painel de missão">
+        <header class="term-panel-header">
+            <span class="status-dot" aria-hidden="true"></span>
+            <span class="term-panel-title">BRIEFING // MISSÃO ATIVA</span>
+            <span class="term-panel-badge">SOC-25</span>
+        </header>
+
+        <div class="term-readout">
+            <div class="term-readout-row">
+                <span class="term-key">GRADE</span>
+                <span class="term-val">5 × 5 = 25 CASAS</span>
+            </div>
+            <div class="term-readout-row">
+                <span class="term-key">LIVRE</span>
+                <span class="term-val">1 ESPAÇO GRÁTIS</span>
+            </div>
+            <div class="term-readout-row">
+                <span class="term-key">VITÓRIA</span>
+                <span class="term-val">5 EM LINHA</span>
+            </div>
+            <div class="term-readout-row">
+                <span class="term-key">MODO</span>
+                <span class="term-val">PRESENCIAL · AO VIVO</span>
+            </div>
         </div>
 
-        <div class="briefing-panel reveal reveal-delay-2">
-            <div class="panel-label"><span class="status-dot"></span> BRIEFING DA RODADA</div>
-            <h2>Encontre sua<br><em>conexão.</em></h2>
-            <p class="briefing-copy">Cada casa é uma pergunta esperando uma pessoa. Circule, converse e complete uma linha.</p>
-            <div class="mission-list">
-                <div><span>01</span><p>Encontre alguém que combine com a casa.</p></div>
-                <div><span>02</span><p>Toque na casa para registrar a descoberta.</p></div>
-                <div><span>03</span><p>Complete cinco em linha e faça BINGO.</p></div>
-            </div>
-            <button onclick="launchGame()" class="launch-button">
-                <span>Iniciar missão</span><strong aria-hidden="true">&#8594;</strong>
-            </button>
-            <p class="lobby-footnote">25 casas // 1 espaço livre // diversão garantida</p>
-        </div>
-    </div>
+        <ol class="term-steps">
+            <li><span class="term-step-n">01 &gt;</span> Encontre alguém que combine com uma casa.</li>
+            <li><span class="term-step-n">02 &gt;</span> Toque na casa para registrar.</li>
+            <li><span class="term-step-n">03 &gt;</span> Complete cinco em linha — BINGO!</li>
+        </ol>
+
+        <button onclick="launchGame()" class="term-start-btn">
+            <span class="term-start-label">&#62;_ INICIAR MISSÃO</span>
+            <span class="term-start-arrow" aria-hidden="true">&#8594;</span>
+        </button>
+
+        <p class="term-footnote"><span class="term-cursor-inline" aria-hidden="true">&#9646;</span> Pronto para conexão</p>
+    </section>
 </div>
 
 <!-- ============================================================= -->
