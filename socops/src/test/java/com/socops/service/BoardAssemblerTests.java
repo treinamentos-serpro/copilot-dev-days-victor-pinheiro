@@ -6,7 +6,6 @@ import com.socops.model.WinningStreak;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -35,8 +34,8 @@ class BoardAssemblerTests {
         List<BingoCell> generatedBoard = BoardAssembler.assembleNewBoard();
         BingoCell centreTile = generatedBoard.get(12);
 
-        assertTrue(centreTile.freeCell(),  "Centre tile must be flagged as free");
-        assertTrue(centreTile.selected(),  "Free cell must start already tapped");
+        assertTrue(centreTile.freeCell(), "Centre tile must be flagged as free");
+        assertTrue(centreTile.selected(), "Free cell must start already tapped");
     }
 
     @Test

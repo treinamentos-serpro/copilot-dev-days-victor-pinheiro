@@ -19,6 +19,7 @@ import java.util.stream.IntStream;
 public final class BoardAssembler {
 
     private static final int GRID_SIDE = 5;
+
     private static final int CENTER_SLOT = 12;
 
     private BoardAssembler() {
